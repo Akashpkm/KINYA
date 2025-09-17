@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Portal - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background elements */
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            border-radius: 50%;
+            animation: square 25s infinite;
+            transition-timing-function: linear;
+        }
+        
+        .bg-bubbles li:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .bg-bubbles li:nth-child(2) {
+            left: 20%;
+            animation-delay: 2s;
+            animation-duration: 17s;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .bg-bubbles li:nth-child(3) {
+            left: 25%;
+            animation-delay: 4s;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .bg-bubbles li:nth-child(4) {
+            left: 40%;
+            animation-delay: 0s;
+            animation-duration: 22s;
+            width: 160px;
+            height: 160px;
+        }
+        
+        .bg-bubbles li:nth-child(5) {
+            left: 70%;
+            width: 100px;
+            height: 100px;
+        }
+        
+        .bg-bubbles li:nth-child(6) {
+            left: 80%;
+            animation-delay: 3s;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .bg-bubbles li:nth-child(7) {
+            left: 32%;
+            animation-delay: 7s;
+            width: 140px;
+            height: 140px;
+        }
+        
+        .bg-bubbles li:nth-child(8) {
+            left: 55%;
+            animation-delay: 15s;
+            animation-duration: 40s;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .bg-bubbles li:nth-child(9) {
+            left: 25%;
+            animation-delay: 2s;
+            animation-duration: 40s;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .bg-bubbles li:nth-child(10) {
+            left: 90%;
+            animation-delay: 11s;
+            width: 60px;
+            height: 60px;
+        }
+        
+        @keyframes square {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            margin-right: 15px;
+            background: white;
+            color: #4e54c8;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: rotate(15deg);
+        }
+        
+        .logo-text {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #e0e0ff);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        
+        .user-profile {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .user-profile h6 {
+            margin: 0 10px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .user-profile i {
+            font-size: 18px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            cursor: pointer;
+            background: #f1f3f6;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            background: #4e54c8;
+            color: white;
+        }
+        
+        .auth-form {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease;
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-group input:focus {
+            border-color: #4e54c8;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+            outline: none;
+            background: white;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: #4e54c8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn:hover {
+            background: #3a3eb3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.4);
+        }
+        
+        .btn:active::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .dashboard {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .dashboard h2 {
+            color: #4e54c8;
+            margin-bottom: 35px;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-cards {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+        
+        .report-card {
+            background: rgba(255, 255, 255, 0.9);
+            width: 270px;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .report-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .report-card i {
+            font-size: 45px;
+            color: #4e54c8;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .report-card:hover i {
+            transform: scale(1.1);
+        }
+        
+        .report-card h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .report-card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            transform: scale(0.9);
+            animation: zoomIn 0.3s ease forwards;
+        }
+        
+        @keyframes zoomIn {
+            to { transform: scale(1); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .modal-header h2 {
+            color: #4e54c8;
+            font-size: 26px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #4e54c8;
+            transform: rotate(90deg);
+        }
+        
+        .profile-form input {
+            margin-bottom: 18px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+        
+        .logout-btn:hover {
+            background: #ff2e43;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+        }
+        
+        .save-btn {
+            background: #4e54c8;
+            color: white;
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+        }
+        
+        .save-btn:hover {
+            background: #3a3eb3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.4);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            padding: 18px 28px;
+            background: #4cd964;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4e54c8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .report-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .user-profile {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-top: 20px;
+                width: fit-content;
+                align-self: center;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .logo-text {
+                font-size: 26px;
+            }
+            
+            .logo {
+                width: 50px;
+                height: 50px;
+                font-size: 28px;
+            }
+        }
+        
+        .form-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        /* Enhanced styles for user profile */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4e54c8, #8f94fb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Welcome animation */
+        @keyframes welcomeSlide {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .welcome-message {
+            animation: welcomeSlide 0.5s ease forwards;
+        }
+        
+        /* Enhanced dashboard styling */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4e54c8, #8f94fb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        /* New styles for enhanced design */
+        .card-hover-effect {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card-hover-effect:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .gradient-border {
+            position: relative;
+            border: none;
+        }
+        
+        .gradient-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #4e54c8, #8f94fb, #4e54c8);
+            border-radius: 10px;
+            z-index: -1;
+            animation: borderAnimation 3s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes borderAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Admin Dashboard Styles */
+        .admin-dashboard {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .admin-welcome {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .admin-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #4e54c8;
+            color: white;
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.4);
+        }
+        
+        .admin-btn.refresh {
+            background: #4cd964;
+            box-shadow: 0 5px 15px rgba(76, 217, 100, 极速3);
+        }
+        
+        .admin-btn.logout {
+            background: #ff4757;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .admin-tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .admin-tab.active {
+            color: #4e54c8;
+            border-bottom: 3px solid #4e54c8;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .users-table th, 
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .users-table th {
+            background: #4e54c8;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .users-table tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #ffeaa7;
+            color: #d35400;
+        }
+        
+        .status-approved {
+            background: #d1f7c4;
+            color: #27ae60;
+        }
+        
+        .status-rejected {
+            background: #ffd1d1;
+            color: #c0392b;
+        }
+        
+        .status-blocked {
+            background: #ffd1d1;
+            color: #c0392b;
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .table-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .approve-btn {
+            background: #4cd964;
+            color: white;
+        }
+        
+        .reject-btn {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .block-btn {
+            background: #ff9f43;
+            color: white;
+        }
+        
+        .unblock-btn {
+            background: #2e86de;
+            color: white;
+        }
+        
+        .edit-btn {
+            background: #5f27cd;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #ee5253;
+            color: white;
+        }
+        
+        .table-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        
+        .admin-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .admin-tab {
+            background: linear-gradient(45deg, #ff4757, #ff6b81) !important;
+        }
+        
+        .admin-form {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease;
+            display: none;
+        }
+        
+        .admin-form.active {
+            display: block;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #4e54c8;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+            outline: none;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4e54c8;
+        }
+        
+        .edit-user-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .edit-user-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            transform: scale(0.9);
+            animation: zoomIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-concierge-bell"></i>
+                </div>
+                <div class="logo-text">ServiceHub</div>
+            </div>
+            <h1>Service Portal</h1>
+            <p>Access service and installation reports</p>
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">G</div>
+                <h6>GUEST</h6>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="auth-container" id="authContainer">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" id="loginTab">Login</div>
+                    <div class="auth-tab" id="signupTab">Sign Up</div>
+                    <div class="auth-tab admin-tab" id="adminTab">Admin</div>
+                </div>
+                
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginUsername">Username or Email</label>
+                        <input type="text" id="loginUsername" placeholder="Enter your username or email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        <i class="fas fa-eye password-toggle" id="loginPasswordToggle"></i>
+                    </div>
+                    <div id="loginMessage" class="form-message error-message"></div>
+                    <button type="submit" class="btn gradient-border pulse-animation">
+                        <span>Login</span>
+                    </button>
+                </form>
+                
+                <form class="auth-form" id="signupForm">
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" placeholder="Choose a username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                        <i class="fas fa-eye password-toggle" id="signupPasswordToggle"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        <i class="fas fa-eye password-toggle" id="confirmPasswordToggle"></i>
+                    </div>
+                    <div id="signupMessage" class="form-message error-message"></div>
+                    <button type="submit" class="btn gradient-border">
+                        <span>Sign Up</span>
+                    </button>
+                </form>
+                
+                <form class="admin-form" id="adminForm">
+                    <div class="form-group">
+                        <label for="adminUsername">Admin Username</label>
+                        <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Admin Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                        <i class="fas fa-eye password-toggle" id="adminPasswordToggle"></i>
+                    </div>
+                    <div id="adminMessage" class="form-message error-message"></div>
+                    <button type="submit" class="btn gradient-border">
+                        <span>Admin Login</span>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="dashboard" id="dashboard">
+                <div class="dashboard-header">
+                    <div class="user-welcome">
+                        <div class="user-icon" id="userIcon"></div>
+                        <div>
+                            <h2>Welcome back, <span id="welcomeUser">User</span>!</h2>
+                            <p>Ready to manage your service reports?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-cards">
+                    <div class="report-card card-hover-effect" onclick="location.href='Service.html'">
+                        <i class="fas fa-tools"></i>
+                        <h3>SERVICE REPORT</h3>
+                        <p>View and manage service reports, track ongoing issues, and update service requests</p>
+                    </div>
+                    <div class="report-card card-hover-effect" onclick="location.href='installation.html'">
+                        <i class="fas fa-cogs"></i>
+                        <h3>INSTALLATION REPORT</h3>
+                        <p>View and manage installation reports, schedule new installations, and check status</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-dashboard" id="adminDashboard">
+                <div class="admin-header">
+                    <div class="admin-welcome">
+                        <div class="admin-icon">A</div>
+                        <div>
+                            <h2>Admin Dashboard</h2>
+                            <p>Manage user accounts and approvals</p>
+                        </div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="admin-btn refresh" id="refreshUsers">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="admin-btn logout" id="adminLogout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>TOTAL USERS</h3>
+                        <div class="stat-value" id="totalUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>PENDING APPROVALS</h3>
+                        <div class="stat-value" id="pendingUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>ACTIVE USERS</h3>
+                        <div class="stat-value" id="activeUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>BLOCKED USERS</h3>
+                        <div class="stat-value" id="blockedUsers">0</div>
+                    </div>
+                </div>
+                
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-tab="all">All Users</div>
+                    <div class="admin-tab" data-tab="pending">Pending Approval</div>
+                    <div class="admin-tab" data-tab="approved">Approved Users</div>
+                    <div class="admin-tab" data-tab="blocked">Blocked Users</div>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="userSearch" class="search-input" placeholder="Search users by name or email...">
+                    <button class="admin-btn" id="searchBtn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                
+                <h3>User Management</h3>
+                <div id="usersTableContainer">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="adminEmptyMessage" class="admin-message" style="display: none;">
+                    No users found.
+                </div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="profile-modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>User Profile</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form class="profile-form" id="profileForm">
+                <div class="form-group">
+                    <label for="profileUsername">Username</label>
+                    <input type="text" id="profileUsername" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="profilePassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="profilePassword" placeholder="New password">
+                    <i class="fas fa-eye password-toggle" id="profilePasswordToggle"></i>
+                </div>
+                <div class="action-buttons">
+                    <button type="button" class="action-btn logout-btn" id="logoutBtn">Logout</button>
+                    <button type="submit" class="action-btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="edit-user-modal" id="editUserModal">
+        <div class="edit-user-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <button class="close-btn" id="closeEditModal">&times;</button>
+            </div>
+            <form class="profile-form" id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editUsername">Username</label>
+                    <input type="text" id="editUsername" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" class="search-input">
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="blocked">Blocked</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="action-buttons">
+                    <button type="button" class="action-btn logout-btn" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="action-btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Operation completed successfully!
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const adminTab = document.getElementById('adminTab');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const adminForm = document.getElementById('adminForm');
+        const authContainer = document.getElementById('authContainer');
+        const dashboard = document.getElementById('dashboard');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const userProfile = document.getElementById('userProfile');
+        const profileModal = document.getElementById('profileModal');
+        const closeModal = document.getElementById('closeModal');
+        const profileForm = document.getElementById('profileForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminLogout = document.getElementById('adminLogout');
+        const welcomeUser = document.getElementById('welcomeUser');
+        const notification = document.getElementById('notification');
+        const loading = document.getElementById('loading');
+        const loginMessage = document.getElementById('loginMessage');
+        const signupMessage = document.getElementById('signupMessage');
+        const adminMessage = document.getElementById('adminMessage');
+        const userAvatar = document.getElementById('userAvatar');
+        const userIcon = document.getElementById('userIcon');
+        const refreshUsers = document.getElementById('refreshUsers');
+        const usersTableBody = document.getElementById('usersTableBody');
+        const adminEmptyMessage = document.getElementById('adminEmptyMessage');
+        const editUserModal = document.getElementById('editUserModal');
+        const closeEditModal = document.getElementById('closeEditModal');
+        const editUserForm = document.getElementById('editUserForm');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const userSearch = document.getElementById('userSearch');
+        const searchBtn = document.getElementById('searchBtn');
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const totalUsersEl = document.getElementById('totalUsers');
+        const pendingUsersEl = document.getElementById('pendingUsers');
+        const activeUsersEl = document.getElementById('activeUsers');
+        const blockedUsersEl = document.getElementById('blockedUsers');
+        
+        // Password toggles
+        const loginPasswordToggle = document.getElementById('loginPasswordToggle');
+        const signupPasswordToggle = document.getElementById('signupPasswordToggle');
+        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+        const profilePasswordToggle = document.getElementById('profilePasswordToggle');
+        const adminPasswordToggle = document.getElementById('adminPasswordToggle');
+        
+        // SheetDB API endpoint
+        const SHEETDB_API = 'https://sheetdb.io/api/v1/rdh2pafbx2uj9';
+        
+        // Admin credentials (in a real app, these would be securely stored and validated server-side)
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'admin123'
+        };
+        
+        // Current user data
+        let currentUser = null;
+        let isAdmin = false;
+        let allUsers = [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+        
+        // Check if user is logged in (from localStorage)
+        function checkLoginStatus() {
+            const userData = localStorage.getItem('currentUser');
+            const adminData = localStorage.getItem('adminUser');
+            
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                showDashboard();
+            } else if (adminData) {
+                isAdmin = true;
+                showAdminDashboard();
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.style.background = isError ? '#ff4757' : '#4cd964';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Show loading spinner
+        function showLoading() {
+            loading.style.display = 'flex';
+        }
+        
+        // Hide loading spinner
+        function hideLoading() {
+            loading.style.display = 'none';
+        }
+        
+        // Switch between login, signup and admin forms
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            adminTab.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+            adminForm.classList.remove('active');
+            loginMessage.style.display = 'none';
+            signupMessage.style.display = 'none';
+            adminMessage.style.display = 'none';
+        });
+        
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            adminTab.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+            adminForm.classList.remove('active');
+            loginMessage.style.display = 'none';
+            signupMessage.style.display = 'none';
+            adminMessage.style.display = 'none';
+        });
+        
+        adminTab.addEventListener('click', () => {
+            adminTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupTab.classList.remove('active');
+            adminForm.classList.add('active');
+            loginForm.classList.remove('active');
+            signupForm.classList.remove('active');
+            loginMessage.style.display = 'none';
+            signupMessage.style.display = 'none';
+            adminMessage.style.display = 'none';
+        });
+        
+        // Toggle password visibility
+        function setupPasswordToggle(toggleElement, passwordFieldId) {
+            toggleElement.addEventListener('click', () => {
+                const passwordField = document.getElementById(passwordFieldId);
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    toggleElement.classList.remove('fa-eye');
+                    toggleElement.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    toggleElement.classList.remove('fa-eye-slash');
+                    toggleElement.classList.add('fa-eye');
+                }
+            });
+        }
+        
+        setupPasswordToggle(loginPasswordToggle, 'loginPassword');
+        setupPasswordToggle(signupPasswordToggle, 'signupPassword');
+        setupPasswordToggle(confirmPasswordToggle, 'confirmPassword');
+        setupPasswordToggle(profilePasswordToggle, 'profilePassword');
+        setupPasswordToggle(adminPasswordToggle, 'adminPassword');
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Reset message
+            loginMessage.style.display = 'none';
+            
+            if (!username || !password) {
+                loginMessage.textContent = 'Please fill in all fields';
+                loginMessage.style.display = 'block';
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                // Fetch all users from SheetDB
+                const response = await fetch(SHEETDB_API);
+                const users = await response.json();
+                
+                // Find user with matching credentials
+                const user = users.find(u => (u.name === username || u.email === username) && u.password === password);
+                
+                if (user) {
+                    // Check if user is approved
+                    if (user.status === 'blocked') {
+                        loginMessage.textContent = 'Your account has been blocked by an administrator';
+                        loginMessage.style.display = 'block';
+                        hideLoading();
+                        return;
+                    }
+                    
+                    if (user.status !== 'approved') {
+                        loginMessage.textContent = 'Your account is pending approval by an administrator';
+                        loginMessage.style.display = 'block';
+                        hideLoading();
+                        return;
+                    }
+                    
+                    currentUser = {
+                        username: user.name,
+                        email: user.email
+                    };
+                    
+                    // Save to localStorage
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    showDashboard();
+                    showNotification('Login successful!');
+                } else {
+                    loginMessage.textContent = 'Invalid username/email or password';
+                    loginMessage.style.display = 'block';
+                }
+            } catch (error) {
+                loginMessage.textContent = 'Login failed. Please try again.';
+                loginMessage.style.display = 'block';
+                console.error('Login error:', error);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Handle signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Reset message
+            signupMessage.style.display = 'none';
+            
+            if (!username || !email || !password || !confirmPassword) {
+                signupMessage.textContent = 'Please fill in all fields';
+                signupMessage.style.display = 'block';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                signupMessage.textContent = 'Passwords do not match';
+                signupMessage.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                signupMessage.textContent = 'Password must be at least 6 characters';
+                signupMessage.style.display = 'block';
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                // Check if username already exists
+                const checkResponse = await fetch(SHEETDB_API);
+                const users = await checkResponse.json();
+                
+                if (users.some(user => user.name === username)) {
+                    signupMessage.textContent = 'Username already exists';
+                    signupMessage.style.display = 'block';
+                    hideLoading();
+                    return;
+                }
+                
+                if (users.some(user => user.email === email)) {
+                    signupMessage.textContent = 'Email already registered';
+                    signupMessage.style.display = 'block';
+                    hideLoading();
+                    return;
+                }
+                
+                // Send data to SheetDB with pending status
+                const response = await fetch(SHEETDB_API, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            name: username,
+                            email: email,
+                            password: password,
+                            status: 'pending',
+                            created_at: new Date().toISOString().split('T')[0]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('Account created successfully! Waiting for admin approval.');
+                    
+                    // Clear signup form
+                    signupForm.reset();
+                    
+                    // Switch to login tab and prefill username
+                    loginTab.click();
+                    document.getElementById('loginUsername').value = username;
+                    document.getElementById('loginPassword').value = '';
+                } else {
+                    signupMessage.textContent = 'Signup failed. Please try again.';
+                    signupMessage.style.display = 'block';
+                }
+            } catch (error) {
+                signupMessage.textContent = 'Error connecting to server. Please try again.';
+                signupMessage.style.display = 'block';
+                console.error('Signup error:', error);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Handle admin form submission
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Reset message
+            adminMessage.style.display = 'none';
+            
+            if (!username || !password) {
+                adminMessage.textContent = 'Please fill in all fields';
+                adminMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check admin credentials
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdmin = true;
+                localStorage.setItem('adminUser', JSON.stringify({ username }));
+                showAdminDashboard();
+                showNotification('Admin login successful!');
+            } else {
+                adminMessage.textContent = 'Invalid admin credentials';
+                adminMessage.style.display = 'block';
+            }
+        });
+        
+        // Show dashboard and hide auth forms
+        function showDashboard() {
+            authContainer.style.display = 'none';
+            dashboard.style.display = 'block';
+            adminDashboard.style.display = 'none';
+            welcomeUser.textContent = currentUser.username;
+            userProfile.querySelector('h6').textContent = currentUser.username.toUpperCase();
+            
+            // Update avatar with first letter of username
+            userAvatar.textContent = currentUser.username.charAt(0).toUpperCase();
+            userIcon.textContent = currentUser.username.charAt(0).toUpperCase();
+        }
+        
+        // Show admin dashboard
+        function showAdminDashboard() {
+            authContainer.style.display = 'none';
+            dashboard.style.display = 'none';
+            adminDashboard.style.display = 'block';
+            userProfile.querySelector('h6').textContent = 'ADMIN';
+            userAvatar.textContent = 'A';
+            
+            // Load all users
+            loadAllUsers();
+        }
+        
+        // Load all users for admin management
+        async function loadAllUsers() {
+            showLoading();
+            
+            try {
+                const response = await fetch(SHEETDB_API);
+                allUsers = await response.json();
+                
+                // Update statistics
+                updateUserStats(allUsers);
+                
+                // Filter users based on current tab and search
+                filterUsers();
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showNotification('Error loading users', true);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Update user statistics
+        function updateUserStats(users) {
+            const total = users.length;
+            const pending = users.filter(u => u.status === 'pending').length;
+            const approved = users.filter(u => u.status === 'approved').length;
+            const blocked = users.filter(u => u.status === 'blocked').length;
+            
+            totalUsersEl.textContent = total;
+            pendingUsersEl.textContent = pending;
+            activeUsersEl.textContent = approved;
+            blockedUsersEl.textContent = blocked;
+        }
+        
+        // Filter users based on current tab and search
+        function filterUsers() {
+            let filteredUsers = allUsers;
+            
+            // Apply tab filter
+            if (currentFilter === 'pending') {
+                filteredUsers = filteredUsers.filter(user => user.status === 'pending');
+            } else if (currentFilter === 'approved') {
+                filteredUsers = filteredUsers.filter(user => user.status === 'approved');
+            } else if (currentFilter === 'blocked') {
+                filteredUsers = filteredUsers.filter(user => user.status === 'blocked');
+            }
+            
+            // Apply search filter
+            if (currentSearch) {
+                const searchTerm = currentSearch.toLowerCase();
+                filteredUsers = filteredUsers.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) || 
+                    user.email.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Clear table
+            usersTableBody.innerHTML = '';
+            
+            if (filteredUsers.length === 0) {
+                adminEmptyMessage.style.display = 'block';
+                usersTableBody.parentElement.style.display = 'none';
+            } else {
+                adminEmptyMessage.style.display = 'none';
+                usersTableBody.parentElement.style.display = 'table';
+                
+                // Add users to table
+                filteredUsers.forEach(user => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${user.id || 'N/A'}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+                        <td>${user.created_at || 'N/A'}</td>
+                        <td class="action-cell">
+                            ${user.status === 'pending' ? 
+                                `<button class="table-btn approve-btn" data-id="${user.id}" data-email="${user.email}">Approve</button>
+                                <button class="table-btn reject-btn" data-id="${user.id}" data-email="${user.email}">Reject</button>` : 
+                                ''}
+                            ${user.status === 'approved' ? 
+                                `<button class="table-btn block-btn" data-id="${user.id}" data-email="${user.email}">Block</button>` : 
+                                ''}
+                            ${user.status === 'blocked' ? 
+                                `<button class="table-btn unblock-btn" data-id="${user.id}" data-email="${user.email}">Unblock</button>` : 
+                                ''}
+                            <button class="table-btn edit-btn" data-id="${user.id}" data-email="${user.email}">Edit</button>
+                            <button class="table-btn delete-btn" data-id="${user.id}" data-email="${user.email}">Delete</button>
+                        </td>
+                    `;
+                    
+                    usersTableBody.appendChild(row);
+                });
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.approve-btn').forEach(btn => {
+                    btn.addEventListener('click', () => updateUserStatus(btn.dataset.id, btn.dataset.email, 'approved'));
+                });
+                
+                document.querySelectorAll('.reject-btn').forEach(btn => {
+                    btn.addEventListener('click', () => updateUserStatus(btn.dataset.id, btn.dataset.email, 'rejected'));
+                });
+                
+                document.querySelectorAll('.block-btn').forEach(btn => {
+                    btn.addEventListener('click', () => updateUserStatus(btn.dataset.id, btn.dataset.email, 'blocked'));
+                });
+                
+                document.querySelectorAll('.unblock-btn').forEach(btn => {
+                    btn.addEventListener('click', () => updateUserStatus(btn.dataset.id, btn.dataset.email, 'approved'));
+                });
+                
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', () => editUser(btn.dataset.id, btn.dataset.email));
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', () => deleteUser(btn.dataset.id, btn.dataset.email));
+                });
+            }
+        }
+        
+        // Update user status
+        async function updateUserStatus(userId, userEmail, status) {
+            showLoading();
+            
+            try {
+                // Update user status
+                const response = await fetch(`${SHEETDB_API}/email/${encodeURIComponent(userEmail)}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            status: status,
+                            approved_at: status === 'approved' ? new Date().toISOString().split('T')[0] : '',
+                            approved_by: status === 'approved' ? 'admin' : ''
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification(`User ${status} successfully!`);
+                    loadAllUsers(); // Refresh the list
+                } else {
+                    showNotification('Error updating user', true);
+                }
+            } catch (error) {
+                console.error('Error updating user:', error);
+                showNotification('Error updating user', true);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Edit user
+        async function editUser(userId, userEmail) {
+            showLoading();
+            
+            try {
+                // Find user data
+                const user = allUsers.find(u => u.email === userEmail);
+                
+                if (user) {
+                    // Populate edit form
+                    document.getElementById('editUserId').value = user.id || '';
+                    document.getElementById('editUsername').value = user.name;
+                    document.getElementById('editEmail').value = user.email;
+                    document.getElementById('editStatus').value = user.status || 'pending';
+                    
+                    // Show edit modal
+                    editUserModal.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error preparing user edit:', error);
+                showNotification('Error preparing user edit', true);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Handle edit user form submission
+        editUserForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userId = document.getElementById('editUserId').value;
+            const username = document.getElementById('editUsername').value;
+            const email = document.getElementById('editEmail').value;
+            const status = document.getElementById('editStatus').value;
+            
+            showLoading();
+            
+            try {
+                // Update user data in SheetDB
+                const response = await fetch(`${SHEETDB_API}/id/${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            name: username,
+                            email: email,
+                            status: status,
+                            approved_at: status === 'approved' ? new Date().toISOString().split('T')[0] : '',
+                            approved_by: status === 'approved' ? 'admin' : ''
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('User updated successfully!');
+                    editUserModal.style.display = 'none';
+                    loadAllUsers(); // Refresh the list
+                } else {
+                    showNotification('Error updating user', true);
+                }
+            } catch (error) {
+                console.error('Error updating user:', error);
+                showNotification('Error updating user', true);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Delete a user
+        async function deleteUser(userId, userEmail) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                // Delete user from SheetDB
+                const response = await fetch(`${SHEETDB_API}/email/${encodeURIComponent(userEmail)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showNotification('User deleted successfully!');
+                    loadAllUsers(); // Refresh the list
+                } else {
+                    showNotification('Error deleting user', true);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showNotification('Error deleting user', true);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Admin tabs functionality
+        adminTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                adminTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Set current filter
+                currentFilter = tab.dataset.tab;
+                
+                // Filter users
+                filterUsers();
+            });
+        });
+        
+        // Search functionality
+        searchBtn.addEventListener('click', () => {
+            currentSearch = userSearch.value;
+            filterUsers();
+        });
+        
+        userSearch.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                currentSearch = userSearch.value;
+                filterUsers();
+            }
+        });
+        
+        // Refresh users list
+        refreshUsers.addEventListener('click', () => {
+            loadAllUsers();
+        });
+        
+        // Admin logout
+        adminLogout.addEventListener('click', () => {
+            localStorage.removeItem('adminUser');
+            isAdmin = false;
+            authContainer.style.display = 'flex';
+            adminDashboard.style.display = 'none';
+            adminForm.reset();
+            adminTab.classList.remove('active');
+            loginTab.classList.add('active');
+            loginForm.classList.add('active');
+            adminForm.classList.remove('active');
+            showNotification('Admin logged out successfully');
+        });
+        
+        // Close edit modal
+        closeEditModal.addEventListener('click', () => {
+            editUserModal.style.display = 'none';
+        });
+        
+        cancelEdit.addEventListener('click', () => {
+            editUserModal.style.display = 'none';
+        });
+        
+        // Show profile modal
+        userProfile.addEventListener('click', () => {
+            if (currentUser) {
+                document.getElementById('profileUsername').value = currentUser.username;
+                document.getElementById('profileEmail').value = currentUser.email;
+                document.getElementById('profilePassword').value = '';
+                profileModal.style.display = 'flex';
+            } else if (isAdmin) {
+                showNotification('Admin profile management not implemented', true);
+            } else {
+                showNotification('Please log in to access your profile', true);
+            }
+        });
+        
+        // Close profile modal
+        closeModal.addEventListener('click', () => {
+            profileModal.style.display = 'none';
+        });
+        
+        // Handle profile form submission
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newUsername = document.getElementById('profileUsername').value;
+            const newEmail = document.getElementById('profileEmail').value;
+            const newPassword = document.getElementById('profilePassword').value;
+            
+            showLoading();
+            
+            try {
+                // Update user data in SheetDB
+                // This would require a PATCH request to update the existing record
+                // For now, we'll just update localStorage
+                
+                currentUser.username = newUsername;
+                currentUser.email = newEmail;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                welcomeUser.textContent = currentUser.username;
+                userProfile.querySelector('h6').textContent = currentUser.username.toUpperCase();
+                userAvatar.textContent = currentUser.username.charAt(0).toUpperCase();
+                userIcon.textContent = currentUser.username.charAt(0).toUpperCase();
+                
+                profileModal.style.display = 'none';
+                
+                showNotification('Profile updated successfully!');
+            } catch (error) {
+                showNotification('Error updating profile.', true);
+                console.error('Profile update error:', error);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Handle logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            profileModal.style.display = 'none';
+            authContainer.style.display = 'flex';
+            dashboard.style.display = 'none';
+            userProfile.querySelector('h6').textContent = 'GUEST';
+            userAvatar.textContent = 'G';
+            showNotification('Logged out successfully');
+        });
+        
+        // Initialize the application
+        checkLoginStatus();
+    </script>
+</body>
+</html>

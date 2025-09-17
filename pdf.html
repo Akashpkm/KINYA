@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installation Report - PDF</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #1a4f8b;
+      --primary-dark: #0d3a6b;
+      --secondary: #2c6e49;
+      --accent: #e8f4ff;
+      --border: #1c2e40;
+      --text: #222;
+      --light-bg: #f8f9fa;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 12px;
+      margin: 0;
+      padding: 15px;
+      color: var(--text);
+      line-height: 1.3;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .document-container {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      border: 1px solid var(--primary);
+    }
+    
+    .header {
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary);
+      margin-bottom: 12px;
+    }
+    
+    .header h2 {
+      color: var(--primary);
+      margin: 0 0 3px 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    
+    .header p {
+      margin: 2px 0;
+      color: #444;
+      font-size: 11px;
+    }
+    
+    .header em {
+      color: var(--secondary);
+      font-style: italic;
+      font-weight: 600;
+    }
+    
+    .title {
+      text-align: center;
+      font-weight: 800;
+      margin: 12px 0;
+      font-size: 16px;
+      text-transform: uppercase;
+      color: var(--primary);
+      padding: 6px;
+      background: var(--accent);
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      font-size: 11px;
+      page-break-inside: avoid;
+    }
+    
+    td, th {
+      border: 1px solid var(--border);
+      padding: 6px;
+      vertical-align: top;
+    }
+    
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      text-align: left;
+      font-size: 11px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: var(--accent);
+    }
+    
+    .feedback {
+      margin-top: 12px;
+    }
+    
+    .feedback td {
+      text-align: center;
+      padding: 6px;
+      font-weight: 700;
+    }
+    
+    .feedback tr:first-child {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .feedback td:nth-child(1) { background-color: #e6f7ee; }
+    .feedback td:nth-child(2) { background-color: #c9f0dd; }
+    .feedback td:nth-child(3) { background-color: #ffe6e6; }
+    .feedback td:nth-child(4) { background-color: #ffcccc; }
+    
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 10px;
+      color: #555;
+      padding-top: 10px;
+      border-top: 1px solid var(--primary);
+    }
+    
+    .button-container {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1000;
+    }
+    
+    .print-btn, .download-btn {
+      padding: 8px 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .download-btn {
+      background: var(--secondary);
+    }
+    
+    .print-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    
+    .download-btn:hover {
+      background: #245939;
+      transform: translateY(-1px);
+    }
+    
+    .certification {
+      font-size: 11px;
+      padding: 10px;
+      background-color: var(--accent);
+      border-radius: 3px;
+      margin: 12px 0;
+      border-left: 3px solid var(--secondary);
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .signature-area {
+      margin-top: 15px;
+    }
+    
+    .signature-area p {
+      padding: 5px 0;
+      border-bottom: 1px dashed #aaa;
+      margin: 8px 0;
+      font-size: 11px;
+      text-align: center;
+    }
+    
+    .highlight {
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 12px 0 6px 0;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--primary);
+    }
+    
+    /* Compact layout adjustments */
+    .compact-table {
+      margin-bottom: 8px;
+    }
+    
+    .compact-table td, .compact-table th {
+      padding: 4px 5px;
+    }
+    
+    /* Print optimization */
+    @media print {
+      @page {
+        margin: 0;
+        size: A4 portrait;
+      }
+      
+      body {
+        padding: 0;
+        margin: 0;
+        background: white;
+        color: black;
+        font-size: 10px;
+        width: 100%;
+        height: 100%;
+      }
+      
+      .document-container {
+        width: 100%;
+        height: auto;
+        min-height: 297mm;
+        padding: 8mm;
+        box-shadow: none;
+        margin: 0;
+        border: none;
+        page-break-after: avoid;
+        page-break-before: avoid;
+      }
+      
+      .button-container {
+        display: none;
+      }
+      
+      .header {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #000 !important;
+      }
+      
+      table {
+        page-break-inside: avoid;
+        border: 1px solid #000 !important;
+        font-size: 9px;
+      }
+      
+      th, td {
+        border: 1px solid #000 !important;
+        padding: 4px;
+      }
+      
+      th {
+        background: #222 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .certification {
+        border: 1px solid #000 !important;
+        background-color: #e8e8e8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 9px;
+        padding: 6px;
+      }
+      
+      .title {
+        background-color: #ddd !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 1px solid #000 !important;
+        font-size: 14px;
+        padding: 4px;
+        margin: 10px 0;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .feedback tr:first-child {
+        background: #333 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .feedback td:nth-child(1) { 
+        background-color: #d0d0d0 !important; 
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .feedback td:nth-child(2) { 
+        background-color: #b8b8b8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .feedback td:nth-child(3) { 
+        background-color: #e0c0c0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .feedback td:nth-child(4) { 
+        background-color: #d8a8a8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .highlight {
+        color: #000 !important;
+        font-weight: 700;
+      }
+      
+      .footer {
+        border-top: 1px solid #000 !important;
+        font-size: 8px;
+      }
+      
+      .header h2 {
+        color: #000 !important;
+        font-size: 18px;
+      }
+      
+      .header p {
+        font-size: 9px;
+      }
+      
+      .header em {
+        color: #222 !important;
+      }
+      
+      .section-title {
+        font-size: 11px;
+        margin: 10px 0 5px 0;
+      }
+    }
+    
+    /* Prevent content overflow */
+    .prevent-overflow {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .no-break {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <button class="download-btn" onclick="downloadPDF()">
+      <i class="fas fa-download"></i> Download PDF
+    </button>
+    <button class="print-btn" onclick="window.print()">
+      <i class="fas fa-print"></i> Print PDF
+    </button>
+  </div>
+
+  <div class="document-container">
+    <!-- Header -->
+    <div class="header">
+      <h2>KINYA MEDICAL SYSTEMS AND SOLUTIONS</h2>
+      <p><em>Your Vision, Our Mission</em></p>
+      <p>
+        <i class="fas fa-phone"></i> +91 9790941308 | 
+        <i class="fas fa-envelope"></i> sales@kinya.in | 
+        <i class="fas fa-globe"></i> www.kinya.in
+      </p>
+      <p>
+        <i class="fas fa-file-contract"></i> GSTIN No: 33AAOFK8368D1ZZ | 
+        PAN NO: AAOFK8368D |
+        DRUG LICENCE NO: TN-06-218-00180 / TN-06-20B-00180
+      </p>
+    </div>
+
+    <!-- Title -->
+    <div class="title">
+      <i class="fas fa-tools"></i> INSTALLATION REPORT
+    </div>
+
+    <!-- Customer & Invoice Info -->
+    <div class="section-title no-break">
+      <i class="fas fa-user-circle"></i> CUSTOMER & INVOICE INFORMATION
+    </div>
+    <table class="compact-table no-break">
+      <tr>
+        <td width="50%"><span class="highlight">Date:</span> <span id="pdf-date"></span></td>
+        <td width="50%"><span class="highlight">Invoice No:</span> <span id="pdf-invoiceNo"></span></td>
+      </tr>
+      <tr>
+        <td><span class="highlight">Customer Name:</span> <span id="pdf-customerName"></span></td>
+        <td><span class="highlight">Invoice Date:</span> <span id="pdf-invoiceDate"></span></td>
+      </tr>
+      <tr>
+        <td><span class="highlight">Address:</span> <span id="pdf-address"></span></td>
+        <td><span class="highlight">Installation Date:</span> <span id="pdf-installationDate"></span></td>
+      </tr>
+      <tr>
+        <td><span class="highlight">City:</span> <span id="pdf-city"></span></td>
+        <td><span class="highlight">Engineer Name:</span> <span id="pdf-engineerName"></span></td>
+      </tr>
+      <tr>
+        <td><span class="highlight">Contact No:</span> <span id="pdf-customerContact"></span></td>
+        <td><span class="highlight">Contact No:</span> <span id="pdf-engineerContact"></span></td>
+      </tr>
+    </table>
+
+    <!-- Item Details -->
+    <div class="section-title no-break">
+      <i class="fas fa-box-open"></i> EQUIPMENT DETAILS
+    </div>
+    <table class="compact-table no-break">
+      <tr>
+        <th width="5%">S. No</th>
+        <th width="35%">Item Description</th>
+        <th width="20%">Manufacturer</th>
+        <th width="25%">Serial No / Model No</th>
+        <th width="15%">Quantity</th>
+      </tr>
+      <tbody id="pdf-items">
+      </tbody>
+    </table>
+
+    <!-- Warranty / Training -->
+    <div class="section-title no-break">
+      <i class="fas fa-clipboard-check"></i> INSTALLATION DETAILS
+    </div>
+    <table class="compact-table no-break">
+      <tr>
+        <td width="50%"><span class="highlight">Warranty period:</span> <span id="pdf-warrantyPeriod"></span></td>
+        <td width="50%"><span class="highlight">Training Given?</span> <span id="pdf-trainingGiven"></span></td>
+      </tr>
+      <tr>
+        <td><span class="highlight">Demo Given?</span> <span id="pdf-demoGiven"></span></td>
+        <td><span class="highlight">(Events) Start:</span> <span id="pdf-eventStart"></span> <span class="highlight">End:</span> <span id="pdf-eventEnd"></span></td>
+      </tr>
+    </table>
+
+    <div class="certification no-break">
+      <i class="fas fa-certificate"></i> This is to certify that the product was installed successfully with all the accessories/consumables &amp; is working satisfactorily.  
+      I agree that all the information detailed above is correct.
+    </div>
+
+    <!-- Remarks & Feedback -->
+    <div class="section-title no-break">
+      <i class="fas fa-comment-dots"></i> REMARKS & FEEDBACK
+    </div>
+    <table class="compact-table no-break">
+      <tr>
+        <td><span class="highlight">Remarks:</span> <span id="pdf-remarks"></span></td>
+      </tr>
+    </table>
+
+    <table class="feedback compact-table no-break">
+      <tr>
+        <th colspan="4"><i class="fas fa-star"></i> CUSTOMER FEEDBACK</th>
+      </tr>
+      <tr>
+        <td>Extremely Satisfied</td>
+        <td>Satisfied</td>
+        <td>Dissatisfied</td>
+        <td>Annoyed</td>
+      </tr>
+    </table>
+
+    <div class="signature-area no-break">
+      <table class="compact-table no-break">
+        <tr>
+          <td width="50%"><span class="highlight">Customer Name:</span> <span id="pdf-customerSignName"></span></td>
+          <td width="50%"><span class="highlight">Customer Designation:</span> <span id="pdf-customerDesignation"></span></td>
+        </tr>
+        <tr>
+          <td><span class="highlight">Customer Signature:</span></td>
+          <td><span class="highlight">Date:</span> <span id="pdf-signDate"></span></td>
+        </tr>
+        <tr>
+          <td><span class="highlight">Place:</span> <span id="pdf-signPlace"></span></td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+
+      <p>
+        Customer Seal __________________ &nbsp;&nbsp;&nbsp; 
+        Engineer Signature __________________
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer no-break">
+      <i class="fas fa-heart"></i> Thank you for doing business with us <br>
+      <i class="fas fa-map-marker-alt"></i> Address: Plot No. 55, Mahalakshmi Nagar Ext-7, Nandivaram, Guduvanchery,  
+      Chengalpattu Taluk, Kanchipuram District, Chennai – 603202, Tamil Nadu.
+    </div>
+  </div>
+
+  <script>
+    // Sample data for demonstration
+    const sampleData = {
+      date: "October 25, 2023",
+      invoiceNo: "INV-2023-1087",
+      customerName: "Apollo Hospitals",
+      invoiceDate: "October 20, 2023",
+      address: "123 Medical Road, Health City",
+      installationDate: "October 24, 2023",
+      city: "Chennai",
+      engineerName: "Rajesh Kumar",
+      customerContact: "+91 9876543210",
+      engineerContact: "+91 9765432109",
+      warrantyPeriod: "24",
+      trainingGiven: "Yes",
+      demoGiven: "Yes",
+      eventStart: "10:00 AM",
+      eventEnd: "12:30 PM",
+      remarks: "All equipment installed successfully. Customer was provided with full operational training.",
+      customerSignName: "Dr. S. Gupta",
+      customerDesignation: "Chief Medical Officer",
+      signDate: "October 25, 2023",
+      signPlace: "Chennai",
+      items: JSON.stringify([
+        { itemDescription: "Digital Ultrasound System", manufacturer: "MedTech Industries", serialNo: "US-456789", modelNo: "US-Pro-5000", quantity: "1" },
+        { itemDescription: "Patient Monitoring Kit", manufacturer: "CareMonitor Inc", serialNo: "PM-123456", modelNo: "PM-Kit-7", quantity: "2" },
+        { itemDescription: "Medical Grade Cart", manufacturer: "MobileMed Solutions", serialNo: "CT-987654", modelNo: "MM-Cart-Pro", quantity: "1" }
+      ])
+    };
+
+    // Check if we have data in localStorage, otherwise use sample data for demonstration
+    const recordData = localStorage.getItem('pdfRecord') || JSON.stringify(sampleData);
+    
+    if (recordData) {
+      const record = JSON.parse(recordData);
+      
+      // Populate the PDF with record data
+      document.getElementById('pdf-date').textContent = record.date || 'N/A';
+      document.getElementById('pdf-invoiceNo').textContent = record.invoiceNo || 'N/A';
+      document.getElementById('pdf-customerName').textContent = record.customerName || 'N/A';
+      document.getElementById('pdf-invoiceDate').textContent = record.invoiceDate || 'N/A';
+      document.getElementById('pdf-address').textContent = record.address || 'N/A';
+      document.getElementById('pdf-installationDate').textContent = record.installationDate || 'N/A';
+      document.getElementById('pdf-city').textContent = record.city || 'N/A';
+      document.getElementById('pdf-engineerName').textContent = record.engineerName || 'N/A';
+      document.getElementById('pdf-customerContact').textContent = record.customerContact || 'N/A';
+      document.getElementById('pdf-engineerContact').textContent = record.engineerContact || 'N/A';
+      document.getElementById('pdf-warrantyPeriod').textContent = record.warrantyPeriod ? `${record.warrantyPeriod} months` : 'N/A';
+      document.getElementById('pdf-trainingGiven').textContent = record.trainingGiven || 'No';
+      document.getElementById('pdf-demoGiven').textContent = record.demoGiven || 'No';
+      document.getElementById('pdf-eventStart').textContent = record.eventStart || 'N/A';
+      document.getElementById('pdf-eventEnd').textContent = record.eventEnd || 'N/A';
+      document.getElementById('pdf-remarks').textContent = record.remarks || 'N/A';
+      document.getElementById('pdf-customerSignName').textContent = record.customerSignName || 'N/A';
+      document.getElementById('pdf-customerDesignation').textContent = record.customerDesignation || 'N/A';
+      document.getElementById('pdf-signDate').textContent = record.signDate || 'N/A';
+      document.getElementById('pdf-signPlace').textContent = record.signPlace || 'N/A';
+      
+      // Populate items table
+      const itemsTable = document.getElementById('pdf-items');
+      itemsTable.innerHTML = '';
+      
+      try {
+        const items = JSON.parse(record.items || '[]');
+        if (items.length === 0) {
+          itemsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">No items data available</td></tr>';
+        } else {
+          items.forEach((item, index) => {
+            const row = itemsTable.insertRow();
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${item.itemDescription || 'N/A'}</td>
+              <td>${item.manufacturer || 'N/A'}</td>
+              <td>${item.serialNo || 'N/A'} / ${item.modelNo || 'N/A'}</td>
+              <td>${item.quantity || '1'}</td>
+            `;
+          });
+        }
+      } catch (e) {
+        console.error('Error parsing items:', e);
+        itemsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">Error loading items data</td></tr>';
+      }
+    }
+
+    // Download PDF function using html2pdf
+    function downloadPDF() {
+      const element = document.querySelector('.document-container');
+      const opt = {
+        margin: 5,
+        filename: 'installation_report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      
+      // Generate PDF
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+</body>
+</html>
