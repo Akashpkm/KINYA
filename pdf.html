@@ -195,9 +195,12 @@
     
     .signature-area {
       margin-top: 15px;
+      
     }
     
     .signature-area p {
+      display: flex;
+      justify-content: space-between;
       padding: 5px 0;
       border-bottom: 1px dashed #aaa;
       margin: 8px 0;
@@ -394,7 +397,7 @@
   <div class="document-container">
     <!-- Header -->
     <div class="header">
-      <h2>KINYA MEDICAL SYSTEMS AND SOLUTIONS</h2>
+      <h2>KINYA MEDICAL SYSTEMS AND SOLUTION</h2>
       <p><em>Your Vision, Our Mission</em></p>
       <p>
         <i class="fas fa-phone"></i> +91 9790941308 | 
@@ -402,9 +405,9 @@
         <i class="fas fa-globe"></i> www.kinya.in
       </p>
       <p>
-        <i class="fas fa-file-contract"></i> GSTIN No: 33AAOFK8368D1ZZ | 
+        <i class="fas fa-file-contract"></i> GSTIN No: 33AAOFK8368D1Z2 | 
         PAN NO: AAOFK8368D |
-        DRUG LICENCE NO: TN-06-218-00180 / TN-06-20B-00180
+        DRUG LICENCE NO: TN-06-21B-00180 / TN-06-20B-00180
       </p>
     </div>
 
@@ -515,8 +518,8 @@
       </table>
 
       <p>
-        Customer Seal __________________ &nbsp;&nbsp;&nbsp; 
-        Engineer Signature __________________
+        <span>Customer Seal __________________ &nbsp;&nbsp;&nbsp; </span>
+        <span>Engineer Signature __________________</span>
       </p>
     </div>
 
@@ -565,26 +568,26 @@
       const record = JSON.parse(recordData);
       
       // Populate the PDF with record data
-      document.getElementById('pdf-date').textContent = record.date || 'N/A';
-      document.getElementById('pdf-invoiceNo').textContent = record.invoiceNo || 'N/A';
-      document.getElementById('pdf-customerName').textContent = record.customerName || 'N/A';
-      document.getElementById('pdf-invoiceDate').textContent = record.invoiceDate || 'N/A';
-      document.getElementById('pdf-address').textContent = record.address || 'N/A';
-      document.getElementById('pdf-installationDate').textContent = record.installationDate || 'N/A';
-      document.getElementById('pdf-city').textContent = record.city || 'N/A';
-      document.getElementById('pdf-engineerName').textContent = record.engineerName || 'N/A';
-      document.getElementById('pdf-customerContact').textContent = record.customerContact || 'N/A';
-      document.getElementById('pdf-engineerContact').textContent = record.engineerContact || 'N/A';
-      document.getElementById('pdf-warrantyPeriod').textContent = record.warrantyPeriod ? `${record.warrantyPeriod} months` : 'N/A';
+      document.getElementById('pdf-date').textContent = record.date || ' ';
+      document.getElementById('pdf-invoiceNo').textContent = record.invoiceNo || ' ';
+      document.getElementById('pdf-customerName').textContent = record.customerName || ' ';
+      document.getElementById('pdf-invoiceDate').textContent = record.invoiceDate || ' ';
+      document.getElementById('pdf-address').textContent = record.address || ' ';
+      document.getElementById('pdf-installationDate').textContent = record.installationDate || ' ';
+      document.getElementById('pdf-city').textContent = record.city || ' ';
+      document.getElementById('pdf-engineerName').textContent = record.engineerName || ' ';
+      document.getElementById('pdf-customerContact').textContent = record.customerContact || ' ';
+      document.getElementById('pdf-engineerContact').textContent = record.engineerContact || ' ';
+      document.getElementById('pdf-warrantyPeriod').textContent = record.warrantyPeriod ? `${record.warrantyPeriod} YEARS` : ' ';
       document.getElementById('pdf-trainingGiven').textContent = record.trainingGiven || 'No';
       document.getElementById('pdf-demoGiven').textContent = record.demoGiven || 'No';
-      document.getElementById('pdf-eventStart').textContent = record.eventStart || 'N/A';
-      document.getElementById('pdf-eventEnd').textContent = record.eventEnd || 'N/A';
-      document.getElementById('pdf-remarks').textContent = record.remarks || 'N/A';
-      document.getElementById('pdf-customerSignName').textContent = record.customerSignName || 'N/A';
-      document.getElementById('pdf-customerDesignation').textContent = record.customerDesignation || 'N/A';
-      document.getElementById('pdf-signDate').textContent = record.signDate || 'N/A';
-      document.getElementById('pdf-signPlace').textContent = record.signPlace || 'N/A';
+      document.getElementById('pdf-eventStart').textContent = record.eventStart || ' ';
+      document.getElementById('pdf-eventEnd').textContent = record.eventEnd || ' ';
+      document.getElementById('pdf-remarks').textContent = record.remarks || ' ';
+      document.getElementById('pdf-customerSignName').textContent = record.customerSignName || ' ';
+      document.getElementById('pdf-customerDesignation').textContent = record.customerDesignation || ' ';
+      document.getElementById('pdf-signDate').textContent = record.signDate || ' ';
+      document.getElementById('pdf-signPlace').textContent = record.signPlace || ' ';
       
       // Populate items table
       const itemsTable = document.getElementById('pdf-items');

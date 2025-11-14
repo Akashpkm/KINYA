@@ -208,7 +208,7 @@
     .doc-no {
       text-align: right;
       font-weight: 700;
-      margin-top: -18px; /* Adjusted margin */
+      margin-top: -35px; /* Adjusted margin */
       margin-bottom: 8px; /* Reduced margin */
       font-size: 11px;
       color: #444;
@@ -366,8 +366,8 @@
     
     .stamp-area {
       position: absolute;
-      right: 25px;
-      bottom: 100px;
+      right: 50%;
+      top: 60px;
       opacity: 0.8;
       transform: rotate(15deg);
     }
@@ -426,7 +426,7 @@
       <div class="header">
         <div class="left-info">
           <h2>KINYA</h2>
-          <div class="sub-header">MEDICAL SYSTEMS AND SOLUTIONS</div>
+          <div class="sub-header">MEDICAL SYSTEMS AND SOLUTION</div>
           <div class="tagline">Your Vision, Our Mission</div>
           <div class="compact-row"><span class="info-badge"><i class="fas fa-phone"></i> Phone:</span> +91 9789041308</div>
           <div class="compact-row"><span class="info-badge"><i class="fas fa-envelope"></i> Email:</span> sales@kinya.in</div>
@@ -521,17 +521,18 @@
       <table>
         <tr>
           <td width="33%"><strong><i class="fas fa-user"></i> Name :</strong> <span id="pdf-engineerName" class="data-field"></span></td>
-          <td width="33%"><strong><i class="fas fa-briefcase"></i> Designation :</strong> Service Engineer</td>
-          <td width="34%"><strong><i class="fas fa-phone"></i> Phone/Fax :</strong> <span id="pdf-engineerContact" class="data-field"></span></td>
-        </tr>
-        <tr>
-          <td><strong><i class="fas fa-envelope"></i> Email :</strong> <span id="pdf-engineerEmail" class="data-field"></span></td>
-          <td colspan="2"></td>
+          <td width="33%"><strong><i class="fas fa-briefcase"></i> Designation :</strong></td>
+          <td width="34%"><strong><i class="fas fa-phone"></i> Phone No :</strong> <span id="pdf-engineerContact" class="data-field"></span></td>
         </tr>
         <tr>
           <td><strong><i class="fas fa-signature"></i> Signature :</strong> <div class="signature-line"></div></td>
           <td><strong><i class="fas fa-calendar"></i> Date :</strong> <span id="pdf-closedDate" class="data-field"></span></td>
           <td><strong><i class="fas fa-map-pin"></i> Place :</strong> <span id="pdf-customerCity" class="data-field"></span></td>
+        </tr>
+        <tr>
+          <td><strong><i class="fas fa-user"></i> Customer Name :</strong> <div class="signature-line"></div></td>
+          <td><strong><i class="fas fa-calendar"></i> Desigination :</strong><div class="signature-line"></div> </td>
+          <td><strong><i class="fas fa-signature"></i> Signature :</strong> <div class="signature-line"></div></td>
         </tr>
       </table>
 
@@ -582,35 +583,34 @@
         const report = data[0];
         
         // Populate the PDF template with report data
-        document.getElementById('pdf-csrNo').textContent = report.csrNo || 'N/A';
-        document.getElementById('pdf-date').textContent = report.date || 'N/A';
-        document.getElementById('pdf-customerName').textContent = report.customerName || 'N/A';
-        document.getElementById('pdf-equipmentName').textContent = report.equipmentName || 'N/A';
-        document.getElementById('pdf-address').textContent = report.address || 'N/A';
-        document.getElementById('pdf-serialNo').textContent = report.serialNo || 'N/A';
-        document.getElementById('pdf-city').textContent = report.city || 'N/A';
-        document.getElementById('pdf-customerCity').textContent = report.city || 'N/A';
-        document.getElementById('pdf-manufacturer').textContent = report.manufacturer || 'N/A';
-        document.getElementById('pdf-contactNo').textContent = report.contactNo || 'N/A';
-        document.getElementById('pdf-model').textContent = report.model || 'N/A';
-        document.getElementById('pdf-customerProblem').textContent = report.customerProblem || 'N/A';
-        document.getElementById('pdf-rectification').textContent = report.rectification || 'N/A';
-        document.getElementById('pdf-diagnosisFindings').textContent = report.diagnosisFindings || 'N/A';
-        document.getElementById('pdf-events').textContent = report.events || 'N/A';
-        document.getElementById('pdf-startOfService').textContent = report.startOfService || 'N/A';
-        document.getElementById('pdf-endOfService').textContent = report.endOfService || 'N/A';
-        document.getElementById('pdf-engineerName').textContent = report.engineerName || 'N/A';
-        document.getElementById('pdf-closedDate').textContent = report.closedDate || 'N/A';
+        document.getElementById('pdf-csrNo').textContent = report.csrNo || ' ';
+        document.getElementById('pdf-date').textContent = report.date || ' ';
+        document.getElementById('pdf-customerName').textContent = report.customerName || ' ';
+        document.getElementById('pdf-equipmentName').textContent = report.equipmentName || ' ';
+        document.getElementById('pdf-address').textContent = report.address || ' ';
+        document.getElementById('pdf-serialNo').textContent = report.serialNo || ' ';
+        document.getElementById('pdf-city').textContent = report.city || ' ';
+        document.getElementById('pdf-customerCity').textContent = report.city || ' ';
+        document.getElementById('pdf-manufacturer').textContent = report.manufacturer || ' ';
+        document.getElementById('pdf-contactNo').textContent = report.contactNo || ' ';
+        document.getElementById('pdf-model').textContent = report.model || ' ';
+        document.getElementById('pdf-customerProblem').textContent = report.customerProblem || ' ';
+        document.getElementById('pdf-rectification').textContent = report.rectification || ' ';
+        document.getElementById('pdf-diagnosisFindings').textContent = report.diagnosisFindings || ' ';
+        document.getElementById('pdf-events').textContent = report.events || ' ';
+        document.getElementById('pdf-startOfService').textContent = report.startOfService || ' ';
+        document.getElementById('pdf-endOfService').textContent = report.endOfService || ' ';
+        document.getElementById('pdf-engineerName').textContent = report.engineerName || ' ';
+        document.getElementById('pdf-closedDate').textContent = report.closedDate || ' ';
         
-        // Default engineer contact info
-        document.getElementById('pdf-engineerContact').textContent = '+91 9789041308';
-        document.getElementById('pdf-engineerEmail').textContent = 'service@kinya.in';
+  
+      
         
         // Handle spares data
         const sparesTable = document.getElementById('pdf-spares');
         sparesTable.innerHTML = '';
         
-        if (report.spareNames && report.spareNames !== 'N/A') {
+        if (report.spareNames && report.spareNames !== ' ') {
           const spareNames = report.spareNames.split(', ');
           const spareQuantities = report.spareQuantities.split(', ');
           const spareCosts = report.spareCosts.split(', ');
@@ -619,7 +619,7 @@
             if (spareNames[i] && spareNames[i].trim() !== '') {
               const row = document.createElement('tr');
               row.innerHTML = `
-                <td>${spareNames[i] || 'N/A'}</td>
+                <td>${spareNames[i] || ' '}</td>
                 <td class="text-center">${spareQuantities[i] || 'N/A'}</td>
                 <td class="text-right">${spareCosts[i] ? '₹' + spareCosts[i] : 'N/A'}</td>
               `;
