@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update navigation dropdown based on active tab
     document.getElementById('navSelect').value = 'formTab';
+    
+    // Load initial stats if on data tab
+    if (document.getElementById('dataTab').classList.contains('active')) {
+        loadServiceReports();
+        updateStats();
+    }
 });
 
 // Function to update stats
@@ -21,7 +27,7 @@ async function updateStats() {
         
         // Calculate stats
         const total = data.length;
-        const open = data.filter(report => !report.closedDate).length;
+        const open = data.filter(report => !report.closedDate || report.closedDate === '').length;
         const warranty = data.filter(report => report.serviceType === 'WARRANTY SERVICE').length;
         
         // Calculate closed this month
@@ -29,7 +35,7 @@ async function updateStats() {
         const thisMonth = now.getMonth();
         const thisYear = now.getFullYear();
         const closedThisMonth = data.filter(report => {
-            if (!report.closedDate) return false;
+            if (!report.closedDate || report.closedDate === '') return false;
             const closedDate = new Date(report.closedDate);
             return closedDate.getMonth() === thisMonth && closedDate.getFullYear() === thisYear;
         }).length;
@@ -42,13 +48,6 @@ async function updateStats() {
     } catch (error) {
         console.error('Error updating stats:', error);
     }
-}
-
-// Function to update status based on closed date
-function updateStatusBasedOnClosedDate() {
-    const closedDate = document.getElementById('closedDate').value;
-    // This function will be called when editing a report and the closed date is changed
-    // The status in the table will update automatically when the reports are reloaded
 }
 
 // Function to toggle SheetDB info panel
@@ -116,7 +115,7 @@ function addSpareRow() {
     newRow.innerHTML = `
         <td><input type="text" name="spareName[]" placeholder="Spare part name"></td>
         <td><input type="number" name="spareQuantity[]" placeholder="Qty" min="1" class="number-input"></td>
-        <td><input type="number" name="spareCost[]" placeholder="Cost" min="0" step="0.01" class="number-input"></td>
+        <td><input type="text" name="spareCost[]" placeholder="Cost" min="0" step="0.01" class="number-input"></td>
         <td><button type="button" class="delete-btn" onclick="deleteSpareRow(this)"><i class="fas fa-trash"></i></button></td>
     `;
     
@@ -139,6 +138,16 @@ function resetForm() {
         // Remove all spare rows except the first one
         while (tableBody.rows.length > 1) {
             tableBody.deleteRow(1);
+        }
+        
+        // Clear the first row
+        if (tableBody.rows[0]) {
+            tableBody.rows[0].innerHTML = `
+                <td><input type="text" name="spareName[]" placeholder="Spare part name"></td>
+                <td><input type="number" name="spareQuantity[]" placeholder="Qty" min="1" class="number-input"></td>
+                <td><input type="text" name="spareCost[]" placeholder="Cost" min="0" step="0.01" class="number-input"></td>
+                <td><button type="button" class="delete-btn" onclick="deleteSpareRow(this)"><i class="fas fa-trash"></i></button></td>
+            `;
         }
         
         // Set default date to today
@@ -187,8 +196,8 @@ async function loadServiceReports() {
         
         data.forEach(report => {
             // Status is now based on whether closedDate has a value
-            const status = report.closedDate ? 'Closed' : 'Open';
-            const statusClass = report.closedDate ? 'status-closed' : 'status-open';
+            const status = report.closedDate && report.closedDate !== '' ? 'Closed' : 'Open';
+            const statusClass = report.closedDate && report.closedDate !== '' ? 'status-closed' : 'status-open';
             
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -305,10 +314,10 @@ async function viewReport(id) {
                     </div>
                 </div>
             </div>
-      `;
+        `;
         
         // Add spares information if available
-        if (report.spareNames && report.spareNames !== 'N/A') {
+        if (report.spareNames && report.spareNames !== 'N/A' && report.spareNames !== '') {
             modalContent += `
                 <div class="detail-card">
                     <h3 class="detail-card-title"><i class="fas fa-cogs"></i> SPARES REPLACED</h3>
@@ -320,18 +329,36 @@ async function viewReport(id) {
                         </div>
             `;
             
-            // Safely handle spares data
-            const spareNames = (report.spareNames || '').split(', ');
-            const spareQuantities = (report.spareQuantities || '').split(', ');
-            const spareCosts = (report.spareCosts || '').split(', ');
+            // Safely handle spares data - handle different formats
+            let spareNames = [];
+            let spareQuantities = [];
+            let spareCosts = [];
+            
+            if (typeof report.spareNames === 'string') {
+                spareNames = report.spareNames.split(',').map(s => s.trim());
+            } else if (Array.isArray(report.spareNames)) {
+                spareNames = report.spareNames;
+            }
+            
+            if (typeof report.spareQuantities === 'string') {
+                spareQuantities = report.spareQuantities.split(',').map(q => q.trim());
+            } else if (Array.isArray(report.spareQuantities)) {
+                spareQuantities = report.spareQuantities;
+            }
+            
+            if (typeof report.spareCosts === 'string') {
+                spareCosts = report.spareCosts.split(',').map(c => c.trim());
+            } else if (Array.isArray(report.spareCosts)) {
+                spareCosts = report.spareCosts;
+            }
             
             for (let i = 0; i < spareNames.length; i++) {
-                if (spareNames[i] && spareNames[i].trim() !== '') {
+                if (spareNames[i] && spareNames[i] !== '') {
                     modalContent += `
                         <div class="spares-list-item">
                             <div>${spareNames[i] || 'N/A'}</div>
                             <div>${spareQuantities[i] || 'N/A'}</div>
-                            <div>${spareCosts[i] ? '$' + spareCosts[i] : 'N/A'}</div>
+                            <div>${spareCosts[i] ? '₹' + spareCosts[i] : 'N/A'}</div>
                         </div>
                     `;
                 }
@@ -458,23 +485,46 @@ async function editReport(id) {
         const tableBody = document.getElementById('sparesTableBody');
         tableBody.innerHTML = ''; // Clear existing rows
         
-        if (report.spareNames && report.spareNames !== 'N/A') {
-            // Safely split the strings
-            const spareNames = (report.spareNames || '').split(', ');
-            const spareQuantities = (report.spareQuantities || '').split(', ');
-            const spareCosts = (report.spareCosts || '').split(', ');
-            
-            for (let i = 0; i < spareNames.length; i++) {
-                if (spareNames[i] && spareNames[i].trim() !== '') {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td><input type="text" name="spareName[]" placeholder="Spare part name" value="${spareNames[i] || ''}"></td>
-                        <td><input type="number" name="spareQuantity[]" placeholder="Qty" min="1" value="${spareQuantities[i] || ''}" class="number-input"></td>
-                        <td><input type="number" name="spareCost[]" placeholder="Cost" min="0" step="0.01" value="${spareCosts[i] || ''}" class="number-input"></td>
-                        <td><button type="button" class="delete-btn" onclick="deleteSpareRow(this)"><i class="fas fa-trash"></i></button></td>
-                    `;
-                    tableBody.appendChild(newRow);
-                }
+        // Parse spares data safely
+        let spareNames = [];
+        let spareQuantities = [];
+        let spareCosts = [];
+        
+        if (report.spareNames && report.spareNames !== 'N/A' && report.spareNames !== '') {
+            if (typeof report.spareNames === 'string') {
+                spareNames = report.spareNames.split(',').map(s => s.trim());
+            } else if (Array.isArray(report.spareNames)) {
+                spareNames = report.spareNames;
+            }
+        }
+        
+        if (report.spareQuantities && report.spareQuantities !== 'N/A' && report.spareQuantities !== '') {
+            if (typeof report.spareQuantities === 'string') {
+                spareQuantities = report.spareQuantities.split(',').map(q => q.trim());
+            } else if (Array.isArray(report.spareQuantities)) {
+                spareQuantities = report.spareQuantities;
+            }
+        }
+        
+        if (report.spareCosts && report.spareCosts !== 'N/A' && report.spareCosts !== '') {
+            if (typeof report.spareCosts === 'string') {
+                spareCosts = report.spareCosts.split(',').map(c => c.trim());
+            } else if (Array.isArray(report.spareCosts)) {
+                spareCosts = report.spareCosts;
+            }
+        }
+        
+        // Add rows for each spare
+        for (let i = 0; i < spareNames.length; i++) {
+            if (spareNames[i] && spareNames[i] !== '') {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><input type="text" name="spareName[]" placeholder="Spare part name" value="${spareNames[i] || ''}"></td>
+                    <td><input type="number" name="spareQuantity[]" placeholder="Qty" min="1" value="${spareQuantities[i] || ''}" class="number-input"></td>
+                    <td><input type="text" name="spareCost[]" placeholder="Cost" min="0" step="0.01" value="${spareCosts[i] || ''}" class="number-input"></td>
+                    <td><button type="button" class="delete-btn" onclick="deleteSpareRow(this)"><i class="fas fa-trash"></i></button></td>
+                `;
+                tableBody.appendChild(newRow);
             }
         }
         
@@ -580,6 +630,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     const formData = new FormData(this);
     const data = {};
     
+    // First, collect all form fields
     for (const [key, value] of formData.entries()) {
         if (key.endsWith('[]')) {
             const baseKey = key.slice(0, -2);
@@ -598,18 +649,23 @@ document.getElementById('serviceForm').addEventListener('submit', async function
         }
     }
     
-    // Convert arrays to strings for SheetDB
+    // Convert arrays to strings for SheetDB with proper formatting
     if (data.spareName && data.spareName.length > 0) {
-        data.spareNames = data.spareName.join(', ');
-        data.spareQuantities = data.spareQuantity.join(', ');
-        data.spareCosts = data.spareCost.join(', ');
+        // Filter out empty values and ensure proper comma separation
+        const filteredNames = data.spareName.filter(name => name && name.trim() !== '');
+        const filteredQuantities = data.spareQuantity.filter((q, i) => data.spareName[i] && data.spareName[i].trim() !== '');
+        const filteredCosts = data.spareCost.filter((c, i) => data.spareName[i] && data.spareName[i].trim() !== '');
+        
+        data.spareNames = filteredNames.join(', ');
+        data.spareQuantities = filteredQuantities.join(', ');
+        data.spareCosts = filteredCosts.join(', ');
         delete data.spareName;
         delete data.spareQuantity;
         delete data.spareCost;
     } else {
-        data.spareNames = 'N/A';
-        data.spareQuantities = 'N/A';
-        data.spareCosts = 'N/A';
+        data.spareNames = '';
+        data.spareQuantities = '';
+        data.spareCosts = '';
     }
     
     // Generate ID if not exists
